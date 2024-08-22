@@ -87,7 +87,12 @@ class Scenic::MysqlAdapterTest < Minitest::Test
 
   def test_views_dont_show_as_tables
     @adapter.create_view('v', 'select 1 as num')
-    output = ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, StringIO.new)
+    pool_or_conn = if ActiveRecord.gem_version >= "7.2"
+      ActiveRecord::Base.connection_pool
+    else
+      ActiveRecord::Base.connection
+    end
+    output = ActiveRecord::SchemaDumper.dump(pool_or_conn, StringIO.new)
     refute_match(/create_table\s+\"v\"/i, output.string, "View is dumped as a table in schema.rb")
   ensure
     ActiveRecord::Base.connection.execute 'DROP VIEW IF EXISTS v'
