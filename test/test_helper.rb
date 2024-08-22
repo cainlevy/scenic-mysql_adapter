@@ -9,6 +9,6 @@ end
 
 # establish the database connection
 ActiveRecord::Base.establish_connection(
-  ENV['DATABASE_URL'] || 'mysql2://root@localhost/scenic_mysql_adapter_test'
+  ENV['DATABASE_URL'] || 'trilogy://root@localhost/scenic_mysql_adapter_test'
 )
 ActiveRecord::Migration.verbose = false
