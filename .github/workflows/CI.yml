@@ -17,6 +17,15 @@ jobs:
           - 'trilogy'
           - 'mysql2'
 
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: scenic_mysql_adapter_test
+        ports:
+          - 3306:3306
+
     steps:
       - uses: actions/checkout@v3
 
@@ -25,12 +34,6 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-
-      - name: Start and create DB
-        run: |
-          sudo service mysql start
-          sleep 10
-          mysql -u root -proot -e "CREATE DATABASE scenic_mysql_adapter_test;"
 
       - name: Run tests
         env:
